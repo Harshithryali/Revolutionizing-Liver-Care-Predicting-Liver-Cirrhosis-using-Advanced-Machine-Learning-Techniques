@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liver Cirrhosis Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="roboto">Revolutionizing Liver Care</h1>
+    </header>
+
+    <form action="/y_predict" method="post" id="prediction-form">
+        <h1 id="main-heading">Predict Liver Cirrhosis</h1>
+        <hr>
+        <div class="form-column">
+            <label>Age:</label>
+            <input type="text" name="Age" required>
+
+            <label>Alcohol consumption (quarters/day):</label>
+            <input type="text" name="Quantity_of_alcohol_consumption" required>
+
+            <label>Diabetes Result:</label>
+            <select name="Diabetes_Result" required>
+                <option value="">Select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <label>Blood pressure (e.g., 138/90):</label>
+            <input type="text" name="Blood_pressure" required>
+
+            <label>Hemoglobin (g/dl):</label>
+            <input type="text" name="Hemoglobin" required>
+
+            <label>PCV (%):</label>
+            <input type="text" name="PCV" required>
+
+            <label>Polymorphs (%):</label>
+            <input type="text" name="Polymorphs" required>
+
+            <label>USG Abdomen:</label>
+            <select name="USG_Abdomen" required>
+                <option value="">Select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="form-column">
+            <label>Lymphocytes (%):</label>
+            <input type="text" name="Lymphocytes" required>
+
+            <label>Platelet Count (lakhs/mm):</label>
+            <input type="text" name="Platelet_Count" required>
+
+            <label>Indirect (mg/dl):</label>
+            <input type="text" name="Indirect" required>
+
+            <label>Total Protein (g/dl):</label>
+            <input type="text" name="Total_Protein" required>
+
+            <label>Albumin (g/dl):</label>
+            <input type="text" name="Albumin" required>
+
+            <label>Globulin (g/dl):</label>
+            <input type="text" name="Globulin" required>
+
+            <label>A/G Ratio:</label>
+            <input type="text" name="AG_Ratio" required>
+
+            <label>AL.Phosphatase (U/L):</label>
+            <input type="text" name="AL_Phosphatase" required>
+        </div>
+
+        <div class="submit-button">
+            <input type="submit" value="Predict">
+        </div>
+        <div id="prediction-result">
+            <h2>{{ prediction_text }}</h2>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById("prediction-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch("/y_predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("prediction-result").innerHTML = `<h2>${data.prediction_text}</h2>`;
+            })
+            .catch(() => {
+                document.getElementById("prediction-result").innerHTML = `<h2>Error during prediction</h2>`;
+            });
+        });
+    </script>
+</body>
+</html>
